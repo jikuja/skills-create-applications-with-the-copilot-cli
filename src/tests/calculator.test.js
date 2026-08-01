@@ -1,12 +1,13 @@
 /**
  * calculator.test.js - Unit tests for calculator.js
  *
- * Covers all four supported operations:
- *   addition (+), subtraction (-), multiplication (*), division (/)
+ * Covers all supported operations:
+ *   addition (+), subtraction (-), multiplication (*), division (/),
+ *   modulo (%), exponentiation (**), square root (sqrt)
  * Including edge cases such as division by zero, negatives, and decimals.
  */
 
-const { add, subtract, multiply, divide } = require('../calculator');
+const { add, subtract, multiply, divide, modulo, exponentiate, sqrt } = require('../calculator');
 
 // --- Addition (+) ---
 describe('add', () => {
@@ -53,5 +54,50 @@ describe('divide', () => {
   });
   test('throws an error when dividing negative by zero', () => {
     expect(() => divide(-5, 0)).toThrow('Division by zero');
+  });
+});
+
+// --- Modulo (%) ---
+describe('modulo', () => {
+  test('10 % 3 = 1', () => expect(modulo(10, 3)).toBe(1));
+  test('returns zero when evenly divisible', () => expect(modulo(9, 3)).toBe(0));
+  test('modulo with negative dividend', () => expect(modulo(-10, 3)).toBe(-1));
+  test('modulo with negative divisor', () => expect(modulo(10, -3)).toBe(1));
+  test('modulo of decimal numbers', () => expect(modulo(5.5, 2)).toBeCloseTo(1.5));
+
+  // Edge case: modulo by zero
+  test('throws an error when modulo by zero', () => {
+    expect(() => modulo(10, 0)).toThrow('Modulo by zero');
+  });
+  test('throws an error when modulo negative by zero', () => {
+    expect(() => modulo(-5, 0)).toThrow('Modulo by zero');
+  });
+});
+
+// --- Exponentiation (**) ---
+describe('exponentiate', () => {
+  test('2 ** 10 = 1024', () => expect(exponentiate(2, 10)).toBe(1024));
+  test('raises to power of zero', () => expect(exponentiate(5, 0)).toBe(1));
+  test('raises to power of one', () => expect(exponentiate(7, 1)).toBe(7));
+  test('raises negative base to even power', () => expect(exponentiate(-2, 2)).toBe(4));
+  test('raises negative base to odd power', () => expect(exponentiate(-2, 3)).toBe(-8));
+  test('raises to fractional power', () => expect(exponentiate(4, 0.5)).toBe(2));
+  test('zero to any positive power is zero', () => expect(exponentiate(0, 5)).toBe(0));
+});
+
+// --- Square Root (sqrt) ---
+describe('sqrt', () => {
+  test('sqrt(9) = 3 (image example)', () => expect(sqrt(9)).toBe(3));
+  test('sqrt(4) = 2', () => expect(sqrt(4)).toBe(2));
+  test('sqrt(0) = 0', () => expect(sqrt(0)).toBe(0));
+  test('sqrt(2) is approximately 1.414', () => expect(sqrt(2)).toBeCloseTo(1.4142135623730951));
+  test('sqrt of a decimal', () => expect(sqrt(0.25)).toBe(0.5));
+
+  // Edge case: square root of a negative number
+  test('throws an error for negative input', () => {
+    expect(() => sqrt(-1)).toThrow('Square root of negative number');
+  });
+  test('throws an error for negative decimal', () => {
+    expect(() => sqrt(-0.5)).toThrow('Square root of negative number');
   });
 });
